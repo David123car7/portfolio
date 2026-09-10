@@ -1,0 +1,125 @@
+---
+---
+
+<dialog id="case-study-modal" class="case-study-modal">
+  <div class="case-study-modal-inner">
+    <button
+      type="button"
+      id="case-study-modal-close"
+      aria-label="Close"
+      class="absolute top-4 right-4 size-10 flex justify-center items-center text-[var(--white-icon)] hover:text-white transition duration-300 ease-in-out border border-1 border-[var(--white-icon-tr)] rounded-xl bg-[#1414149c] hover:bg-[var(--white-icon-tr)]"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        class="size-5"
+      >
+        <path
+          d="M12.0007 10.5865L16.9504 5.63672L18.3646 7.05093L13.4149 12.0007L18.3646 16.9504L16.9504 18.3646L12.0007 13.4149L7.05093 18.3646L5.63672 16.9504L10.5865 12.0007L5.63672 7.05093L7.05093 5.63672L12.0007 10.5865Z"
+        ></path>
+      </svg>
+    </button>
+    <div id="case-study-modal-body" class="text-left" />
+  </div>
+</dialog>
+
+<style>
+  .case-study-modal {
+    background: var(--background);
+    color: var(--white);
+    border: 1px solid var(--white-icon-tr);
+    border-radius: 1.25rem;
+    padding: 0;
+    width: min(760px, 92vw);
+    max-height: 85vh;
+    margin: auto;
+    /* The native <dialog> element defaults to `overflow: auto` in the
+       browser's UA stylesheet. Left as-is, that makes the dialog itself
+       independently scrollable *in addition to* `.case-study-modal-inner`
+       below — a second scrollbar. Only the inner content area should
+       scroll, so the dialog's own overflow is disabled here. */
+    overflow: hidden;
+  }
+
+  .case-study-modal::backdrop {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+  }
+
+  .case-study-modal-inner {
+    position: relative;
+    padding: 2.5rem 2rem 2rem;
+    max-height: 85vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--white-icon) var(--white-icon-tr);
+  }
+
+  /* Match the site's global scrollbar styling (see Layout.astro) so the
+     modal doesn't fall back to the browser default. */
+  .case-study-modal-inner::-webkit-scrollbar {
+    width: 15px;
+  }
+
+  .case-study-modal-inner::-webkit-scrollbar-track {
+    background: var(--white-icon-tr);
+    border-radius: 30px;
+  }
+
+  .case-study-modal-inner::-webkit-scrollbar-thumb {
+    background: var(--white-icon);
+    border-radius: 10px;
+  }
+
+  .case-study-modal-inner::-webkit-scrollbar-thumb:hover {
+    background: var(--sec);
+  }
+</style>
+
+<script>
+  const dialog = document.getElementById(
+    "case-study-modal"
+  ) as HTMLDialogElement | null;
+  const closeBtn = document.getElementById("case-study-modal-close");
+  const body = document.getElementById("case-study-modal-body");
+
+  function openModal(template: HTMLTemplateElement) {
+    if (!dialog || !body) return;
+    body.replaceChildren(template.content.cloneNode(true));
+    dialog.showModal();
+    document.body.style.overflow = "hidden";
+  }
+
+  // Fires for every close path — the X button, a backdrop click, and the
+  // browser's native Escape-key handling — so this is the single place to
+  // restore background scrolling.
+  dialog?.addEventListener("close", () => {
+    document.body.style.overflow = "";
+  });
+
+  document
+    .querySelectorAll<HTMLElement>("[data-case-study-trigger]")
+    .forEach((trigger) => {
+      const template = trigger.querySelector<HTMLTemplateElement>(
+        "template[data-case-study-content]"
+      );
+      if (!template) return;
+
+      trigger.addEventListener("click", () => openModal(template));
+      trigger.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openModal(template);
+        }
+      });
+    });
+
+  closeBtn?.addEventListener("click", () => dialog?.close());
+
+  // Click on the backdrop (the <dialog> element itself, outside the inner
+  // content wrapper) closes the modal.
+  dialog?.addEventListener("click", (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+</script>

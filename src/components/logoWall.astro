@@ -1,19 +1,13 @@
 ---
 const technologies = [
-  "astro",
-  "vue",
-  "react",
-  "typeScript",
-  "tailwindcss",
-  "next",
-  "nodejs",
-  "HTML5",
-  "CSS3",
-  "javaScript",
-  "git",
-  "supabase",
-  "mysql",
-  "bash",
+  { name: "C#", file: "csharp" },
+  { name: "TypeScript", file: "typescript" },
+  { name: "C++", file: "cplusplus" },
+  { name: "Git", file: "git" },
+  { name: "C", file: "c" },
+  { name: "NestJS", file: "nestjs" },
+  { name: "Docker", file: "docker" },
+  { name: "PostgreSQL", file: "postgresql" },
 ];
 ---
 
@@ -24,13 +18,13 @@ const technologies = [
   <div class="flex animate-scroll w-max will-change-transform">
     {
       [...technologies, ...technologies].map((tech, index) => (
-        <div 
+        <div
           class="flex items-center gap-2 pr-12 md:pr-20 group transition-all duration-300"
           aria-hidden={index >= technologies.length ? "true" : "false"}
         >
           <img
-            src={`/svg/${tech}.svg`}
-            alt={tech}
+            src={`/svg/${tech.file}.svg`}
+            alt={tech.name}
             class="h-7 w-auto object-contain transition-transform group-hover:scale-110 opacity-60"
             width="30"
             height="30"
@@ -38,7 +32,7 @@ const technologies = [
             decoding="async"
           />
           <span class="text-lg font-medium text-[var(--white-icon)] whitespace-nowrap">
-            {tech.charAt(0).toUpperCase() + tech.slice(1)}
+            {tech.name}
           </span>
         </div>
       ))

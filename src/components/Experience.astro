@@ -1,0 +1,53 @@
+---
+import { experience } from "@/data/experience";
+---
+
+<section
+  id="experience"
+  class="py-12 border-t border-[#ffffff10] text-[var(--white)]"
+>
+  <div class="max-w-5xl mx-auto">
+    <h2 class="text-lg text-[var(--sec)] mb-2 shiny-sec">My journey</h2>
+    <h3 class="text-4xl md:text-5xl font-medium mb-8">Experience</h3>
+
+    <div class="space-y-6">
+      {
+        experience.map((item) => (
+          <div class="rounded-2xl border border-1 border-[var(--white-icon-tr)] bg-[#1414149c] p-5 md:p-6">
+            <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-1 md:gap-4">
+              <div>
+                <h4 class="text-xl md:text-2xl font-semibold text-[var(--white)]">
+                  {item.role}
+                </h4>
+                <p class="text-[var(--sec)] font-medium">{item.company}</p>
+              </div>
+              <span class="shrink-0 text-sm text-[var(--white-icon)] md:text-right md:pt-1">
+                {item.startDate} &ndash; {item.endDate}
+              </span>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2 mt-3">
+              <span class="text-xs font-medium text-[var(--sec)] border border-[var(--sec)] rounded-full px-3 py-1">
+                {item.type}
+              </span>
+              {item.location && (
+                <span class="text-xs text-[var(--white-icon)] bg-[var(--white-icon-tr)] rounded-full px-3 py-1">
+                  {item.location}
+                </span>
+              )}
+            </div>
+
+            <ul class="space-y-2 mt-4">
+              {item.bullets.map((bullet) => (
+                <li class="flex gap-2 text-sm md:text-base text-[var(--white-icon)]">
+                  <span class="text-[var(--sec)]">&bull;</span>
+                  <span>{bullet}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

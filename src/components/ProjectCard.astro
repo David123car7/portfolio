@@ -1,0 +1,222 @@
+---
+import type { Project } from "@/data/projects";
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const isCaseStudy = project.category === "case-study";
+const showGithub = !isCaseStudy && project.githubUrl;
+const showLiveLink = !isCaseStudy && Boolean(project.liveUrl);
+---
+
+<div
+  class:list={[
+    "group flex flex-col h-full rounded-2xl overflow-hidden border border-1 border-[var(--white-icon-tr)] bg-[#1414149c] transition-all duration-300 hover:shadow-xl",
+    { "cursor-pointer hover:border-[var(--sec)]": isCaseStudy },
+  ]}
+  data-category={project.category}
+  data-case-study-trigger={isCaseStudy ? "true" : undefined}
+  role={isCaseStudy ? "button" : undefined}
+  tabindex={isCaseStudy ? 0 : undefined}
+  aria-haspopup={isCaseStudy ? "dialog" : undefined}
+>
+  {
+    project.image && (
+      <div class="overflow-hidden">
+        <img
+          src={project.image}
+          alt={project.title}
+          class="w-full h-48 md:h-56 object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+      </div>
+    )
+  }
+
+  <div class="flex flex-col flex-grow gap-3 p-5">
+    <div class="flex items-start justify-between gap-3">
+      <h4 class="text-xl md:text-2xl font-semibold text-[var(--white)]">
+        {project.title}
+      </h4>
+      {
+        project.subField && (
+          <span class="shrink-0 text-xs font-medium text-[var(--sec)] border border-[var(--sec)] rounded-full px-3 py-1">
+            {project.subField}
+          </span>
+        )
+      }
+    </div>
+
+    <p class="text-sm text-[var(--white-icon)] flex-grow">
+      {project.description}
+    </p>
+
+    {
+      project.tags.length > 0 && (
+        <div class="flex flex-wrap gap-2">
+          {project.tags.map((tag: string) => (
+            <span class="text-xs text-[var(--white-icon)] bg-[var(--white-icon-tr)] rounded-full px-3 py-1">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )
+    }
+
+    {
+      isCaseStudy && (
+        <div class="flex items-center gap-2 pt-2 text-sm font-medium text-[var(--sec)]">
+          <span>View case study</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="size-4 transition-transform duration-300 group-hover:translate-x-1"
+          >
+            <path d="M16.0037 9.41421L7.39712 18.0208L5.98291 16.6066L14.5895 8H7.00373V6H18.0037V17H16.0037V9.41421Z" />
+          </svg>
+        </div>
+      )
+    }
+
+    {
+      !isCaseStudy && (showGithub || showLiveLink) && (
+        <div class="flex items-center gap-2 pt-2">
+          {showGithub && (
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={project.githubUrl}
+              aria-label="GitHub"
+              class="size-12 flex justify-center items-center text-[var(--white-icon)] hover:text-white transition duration-300 ease-in-out border border-1 border-[var(--white-icon-tr)] rounded-xl bg-[#1414149c] hover:bg-[var(--white-icon-tr)]"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="size-6"
+              >
+                <path d="M24 12L18.3431 17.6569L16.9289 16.2426L21.1716 12L16.9289 7.75736L18.3431 6.34315L24 12ZM2.82843 12L7.07107 16.2426L5.65685 17.6569L0 12L5.65685 6.34315L7.07107 7.75736L2.82843 12ZM9.78845 21H7.66009L14.2116 3H16.3399L9.78845 21Z" />
+              </svg>
+            </a>
+          )}
+
+          {showLiveLink && (
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={project.liveUrl}
+              class="flex items-center gap-2 text-sm font-medium text-[var(--white-icon)] hover:text-white transition duration-300 ease-in-out border border-1 border-[var(--white-icon-tr)] rounded-xl px-4 py-3 bg-[#1414149c] hover:bg-[var(--white-icon-tr)]"
+            >
+              <span>Live Site</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="size-4"
+              >
+                <path d="M16.0037 9.41421L7.39712 18.0208L5.98291 16.6066L14.5895 8H7.00373V6H18.0037V17H16.0037V9.41421Z" />
+              </svg>
+            </a>
+          )}
+        </div>
+      )
+    }
+  </div>
+
+  {
+    isCaseStudy && (
+      <template data-case-study-content>
+        <h3 class="text-2xl md:text-3xl font-semibold text-[var(--white)] mb-2">
+          {project.title}
+        </h3>
+        {project.subField && (
+          <span class="inline-block text-xs font-medium text-[var(--sec)] border border-[var(--sec)] rounded-full px-3 py-1 mb-4">
+            {project.subField}
+          </span>
+        )}
+
+        <div class="space-y-6 mt-4">
+          {project.problem && (
+            <div>
+              <h4 class="uppercase tracking-wide text-xs font-semibold text-[var(--sec)] mb-2">
+                Problem
+              </h4>
+              <p class="text-sm md:text-base text-[var(--white-icon)]">
+                {project.problem}
+              </p>
+            </div>
+          )}
+
+          {project.role && (
+            <div>
+              <h4 class="uppercase tracking-wide text-xs font-semibold text-[var(--sec)] mb-2">
+                My Role
+              </h4>
+              <p class="text-sm md:text-base text-[var(--white-icon)]">
+                {project.role}
+              </p>
+            </div>
+          )}
+
+          {project.decisions && project.decisions.length > 0 && (
+            <div>
+              <h4 class="uppercase tracking-wide text-xs font-semibold text-[var(--sec)] mb-2">
+                Key Decisions
+              </h4>
+              <ul class="space-y-2">
+                {project.decisions.map((decision: string) => (
+                  <li class="flex gap-2 text-sm md:text-base text-[var(--white-icon)]">
+                    <span class="text-[var(--sec)]">•</span>
+                    <span>{decision}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {project.outcome && (
+            <div>
+              <h4 class="uppercase tracking-wide text-xs font-semibold text-[var(--sec)] mb-2">
+                Outcome
+              </h4>
+              <p class="text-sm md:text-base text-[var(--white-icon)]">
+                {project.outcome}
+              </p>
+            </div>
+          )}
+
+          {project.tags.length > 0 && (
+            <div class="flex flex-wrap gap-2">
+              {project.tags.map((tag: string) => (
+                <span class="text-xs text-[var(--white-icon)] bg-[var(--white-icon-tr)] rounded-full px-3 py-1">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {project.liveUrl && (
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={project.liveUrl}
+              class="inline-flex items-center gap-2 text-sm font-medium text-[var(--white-icon)] hover:text-white transition duration-300 ease-in-out border border-1 border-[var(--white-icon-tr)] rounded-xl px-4 py-3 bg-[#1414149c] hover:bg-[var(--white-icon-tr)]"
+            >
+              <span>Live Site</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="size-4"
+              >
+                <path d="M16.0037 9.41421L7.39712 18.0208L5.98291 16.6066L14.5895 8H7.00373V6H18.0037V17H16.0037V9.41421Z" />
+              </svg>
+            </a>
+          )}
+        </div>
+      </template>
+    )
+  }
+</div>

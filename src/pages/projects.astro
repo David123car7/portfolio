@@ -1,0 +1,106 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Nav from "@/components/nav.astro";
+import Footer from "@/components/footer.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import CaseStudyModal from "@/components/CaseStudyModal.astro";
+import { projects } from "@/data/projects";
+
+const filters = [
+  { label: "All", value: "all" },
+  { label: "Case Studies", value: "case-study" },
+  { label: "Academic", value: "academic" },
+  { label: "Personal", value: "personal" },
+  { label: "VRChat", value: "vrchat" },
+];
+---
+
+<Layout title="Projects">
+  <Nav />
+  <section id="projects" class="text-[var(--white)] mt-12 md:mt-0 pb-12">
+    <div class="max-w-5xl mx-auto pt-8 md:pt-36">
+      <h2 class="text-lg text-[var(--sec)] mb-2 shiny-sec">My work</h2>
+      <h3 class="text-4xl md:text-5xl font-medium mb-4">Projects</h3>
+      <p class="text-md md:text-lg text-[var(--white-icon)] mb-8 max-w-2xl">
+        A collection of case studies, academic work, and personal projects
+        I've built.
+      </p>
+
+      <div class="flex flex-wrap gap-3 mb-10" id="project-filters">
+        {
+          filters.map((filter) => (
+            <button
+              type="button"
+              data-filter={filter.value}
+              class:list={[
+                "filter-tab px-4 py-2 rounded-full border border-[var(--white-icon-tr)] text-sm md:text-base text-[var(--white-icon)] transition-colors duration-300 hover:text-white hover:border-[var(--sec)]",
+                { active: filter.value === "all" },
+              ]}
+            >
+              {filter.label}
+            </button>
+          ))
+        }
+      </div>
+
+      <div
+        id="projects-grid"
+        class="grid grid-cols-1 md:grid-cols-2 gap-8"
+      >
+        {projects.map((project) => <ProjectCard project={project} />)}
+      </div>
+
+      <p
+        id="no-results"
+        hidden
+        class="text-center text-[var(--white-icon)] py-12"
+      >
+        No projects in this category yet.
+      </p>
+    </div>
+  </section>
+  <CaseStudyModal />
+  <Footer />
+</Layout>
+
+<style>
+  .filter-tab.active {
+    color: var(--background);
+    background-color: var(--sec);
+    border-color: var(--sec);
+  }
+</style>
+
+<script>
+  const tabs = document.querySelectorAll<HTMLButtonElement>(
+    "#project-filters .filter-tab"
+  );
+  const cards = document.querySelectorAll<HTMLElement>(
+    "#projects-grid [data-category]"
+  );
+  const noResults = document.getElementById("no-results");
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const filter = tab.dataset.filter;
+
+      tabs.forEach((t) => t.classList.remove("active"));
+      tab.classList.add("active");
+
+      let visibleCount = 0;
+      cards.forEach((card) => {
+        const matches = filter === "all" || card.dataset.category === filter;
+        // Cards use Tailwind's `flex` class, which (being an author-stylesheet
+        // rule) always beats the browser's built-in `[hidden]{display:none}`
+        // rule at equal specificity — so `hidden` alone can't hide them.
+        // Inline `style.display` outranks both.
+        card.style.display = matches ? "" : "none";
+        if (matches) visibleCount++;
+      });
+
+      if (noResults) {
+        noResults.hidden = visibleCount !== 0;
+      }
+    });
+  });
+</script>
