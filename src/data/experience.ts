@@ -17,9 +17,10 @@ export const experience: Experience[] = [
     startDate: "Feb 2026",
     endDate: "May 2026",
     bullets: [
-      "Integrated external APIs (App Store Connect and Google Play Console) using C# .NET and PostgreSQL, enabling direct access to platform data and features within the company's infrastructure",
-      "Developed an AI-powered solution to automatically generate responses to App Store and Google Play reviews, using C# .NET for the core logic and TypeScript for the API communicating with the AI models",
-      "Built a backoffice system for user administration, with a C# .NET backend and a React + RefineCore frontend",
+      "Integrated 5 external APIs, including App Store Connect and Google Play Console, into ASOAGENT, the company's platform, giving it direct access to store data and features",
+      "Built an AI solution for ASOAGENT that automatically generates replies to App Store and Google Play reviews based on a set of predefined rules, reducing the time the team spends responding to users",
+      "Developed the ASOAGENT back-office for user management, letting staff manage accounts on their own and laying the foundation for future features",
+      "Tech: C#/.NET, TypeScript, React (Refine), PostgreSQL",
     ],
   },
   {
@@ -29,10 +30,10 @@ export const experience: Experience[] = [
     startDate: "2025",
     endDate: "Present",
     bullets: [
-      "Designed, architected, and independently developed a full product ecosystem for the VRChat virtual reality platform",
-      "Built modular, reusable C# scripts for Unity, designed for integration across different VR projects and environments",
-      "Developed a licensing API in NestJS and TypeScript, using PostgreSQL for the database and Cloudflare for file hosting, allowing customers to validate licenses and download purchased assets",
-      "Managed the full product lifecycle, including technical support and direct customer service for an international client base, entirely in English",
+      "Build and distribute modular C# scripts for Unity, aimed at VRChat creators, reaching 400+ downloads from international customers",
+      "Developed a centralized licensing system that protects the products from unauthorized use and lets customers download and update their assets from one place",
+      "Provide direct technical support to international customers, entirely in English",
+      "Tech: C# (Unity), TypeScript, NestJS, PostgreSQL, Cloudflare",
     ],
   },
   {
